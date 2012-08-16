@@ -12,7 +12,12 @@ module Librevox
       def post_init
         super
         send_data "auth #{@auth}\n\n"
-        send_data "event plain ALL\n\n"
+        #send_data "event plain ALL\n\n"
+      end
+
+      # listen a particular channel's events
+      def subscribe_to_channel_events(uuid)
+        send_data "myevents #{uuid}\n\n"
       end
     end
   end

@@ -78,6 +78,36 @@ module Librevox
         session[name.downcase.gsub(/-/,"_").intern]
       end
 
+
+      # start events handling
+      # allow to subscribe events within freeswitch
+      # @param events the events to subscribe to.
+      def subscribe_to_event(events)
+        sub_events = events
+        sub_events = events.join(" ") unless events.kind_of?(Array)
+        send_data "event plain #{sub_events}\n\n"
+      end
+
+      def unsubscribe_all_events()
+        send_data "noevents\n\n"
+      end
+
+
+      # we can add a filter to the incoming events
+      # @param header the header field for filter to apply
+      # @param value the value of the header field
+      # @example add_event_filter "Event-Name", "CHANNEL_EXECUTE"
+      # @example add_event_filter "Unique-ID", "d29a070f-40ff-43d8-8b9d-d369b2389dfe"
+      def add_event_filter(header, value)
+        send_data "filter #{header} #{value}\n\n"
+      end
+
+      # similar but delete the event filter.
+      # @example delete_event_filter "Unique-ID"  will delete all the filter on Unique-ID
+      def delete_event_filter(header, value="")
+        send_data "filter delete #{header} #{value}\n\n"
+      end
+
       alias :done :close_connection_after_writing
 
       private
