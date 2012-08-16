@@ -249,5 +249,13 @@ module Librevox
     def unset variable, &block
       application "unset", variable, &block
     end
+	# Create directory.
+    # @example
+    #   mkdir "/tmp/some/directory"
+    # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_mkdir
+    def mkdir path
+      application "mkdir", path
+    end
+
   end
 end
