@@ -74,6 +74,10 @@ module Librevox
       def on_event event
       end
 
+      def get_value name
+        session[name.downcase.gsub(/-/,"_").intern]
+      end
+
       alias :done :close_connection_after_writing
 
       private
