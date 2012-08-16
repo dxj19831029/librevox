@@ -22,7 +22,8 @@ module Librevox
       class CommandDelegate
         include Librevox::Commands
 
-        def initialize listener
+        def initialize listener, t="api"
+          super(t)
           @listener = listener
         end
 
@@ -39,6 +40,10 @@ module Librevox
       # @see Librevox::Commands
       def api
         @command_delegate ||= CommandDelegate.new(self)
+      end
+
+      def bgapi
+        @command_bg_delegate ||= CommandDelegate.new(self, "bgapi")
       end
 
       def command msg, &block

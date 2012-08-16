@@ -6,12 +6,16 @@ module Librevox
   #
   # Commands *must* pass on any eventual block passed to them.
   module Commands
+
+    def initialize(t="api")
+      @type = t
+    end
     # Executes a generic API command, optionally taking arguments as string.
     # @example
     #   socket.command "fsctl", "hupall normal_clearing"
     # @see http://wiki.freeswitch.org/wiki/Mod_commands
     def command name, args=""
-      msg = "api #{name}"
+      msg = "#{@type} #{name}"
       msg << " #{args}" if args && !args.empty?
       msg
     end
