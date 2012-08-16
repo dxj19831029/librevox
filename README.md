@@ -167,6 +167,9 @@ restart FreeSWITCH etc.
     
     >> socket.status
     >> > #<Librevox::Response:0x1016acac8 ...>
+    
+    >> socket.raw('sendevent SEND_MESSAGE\nprofile: internal\n...Content-Length: #{body.length}\n\n#{body}\n\n')
+    >> > #<Librevox::Response:0x1023baca2 ...>
 
 ## Further documentation
 

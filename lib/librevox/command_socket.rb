@@ -41,6 +41,11 @@ module Librevox
       read_response
     end
 
+    def raw *args
+      @socket.print *args
+      read_response
+    end
+
     def read_response
       response = Librevox::Response.new
       until response.command_reply? or response.api_response?
@@ -48,8 +53,7 @@ module Librevox
       end
 
       length = response.headers[:content_length].to_i
-      response.content = @socket.read(length) if length > 0
-
+      response.instance_variable_set(:@content, length > 0 ? @socket.read(length) : "")
       response
     end
 
