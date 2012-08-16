@@ -1,3 +1,5 @@
+$: << File.dirname(__FILE__)
+$: << File.join(File.dirname(File.expand_path(__FILE__)),'..','lib')
 require 'bacon'
 require 'librevox'
 
