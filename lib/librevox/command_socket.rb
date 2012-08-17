@@ -78,5 +78,3 @@ module Librevox
     end
   end
 end
-
-end
