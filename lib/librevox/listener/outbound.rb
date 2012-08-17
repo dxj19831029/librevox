@@ -11,6 +11,7 @@ module Librevox
         msg << "call-command: execute\n"
         msg << "execute-app-name: #{app}\n"
         msg << "execute-app-arg: #{args}\n" if args && !args.empty?
+        msg << "event-lock: true\n" if !params[:event_lock].nil? && params[:event_lock]
 
         send_data "#{msg}\n"
 
