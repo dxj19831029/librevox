@@ -79,9 +79,6 @@ module Librevox
       def on_event event
       end
 
-      def get_value name
-        session[name.downcase.gsub(/-/,"_").intern]
-      end
 
 
       # start events handling

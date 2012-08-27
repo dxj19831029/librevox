@@ -58,6 +58,10 @@ module Librevox
         super
       end
 
+      def get_value name
+        session[name.downcase.gsub(/-/,"_").intern]
+      end
+
       def variable name
         session[:"variable_#{name}"]
       end

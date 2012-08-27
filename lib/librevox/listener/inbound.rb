@@ -15,6 +15,10 @@ module Librevox
         #send_data "event plain ALL\n\n"
       end
 
+      def get_value name
+        @response.content[name.downcase.gsub(/-/,"_").intern]
+      end
+
       # listen a particular channel's events
       def subscribe_to_channel_events(uuid)
         send_data "myevents #{uuid}\n\n"
