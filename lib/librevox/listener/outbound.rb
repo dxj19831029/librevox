@@ -23,6 +23,11 @@ module Librevox
         })
       end
 
+      def exit
+        # close socket
+        send_data "exit\n\n"
+      end
+
       # This should probably be in Application#sendmsg instead.
       def sendmsg msg 
         send_data "sendmsg\n%s" % msg
