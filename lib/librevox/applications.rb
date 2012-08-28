@@ -70,7 +70,7 @@ module Librevox
                     args.join ","
                   end
 
-      application "bridge", variables + endpoints, &block
+      application "bridge", variables + endpoints, :event_lock => true, &block
     end
 
     # Deflect a call by sending a REFER. Takes a SIP URI as argument, rerouting
