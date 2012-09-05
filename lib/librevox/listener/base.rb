@@ -66,7 +66,8 @@ module Librevox
 
       def handle_response
         if response.api_response? && @command_queue.any?
-          @command_queue.shift.call(response)
+          c = @command_queue.shift
+          c.call(response) if !c.nil?
         end
 
         if response.event?
