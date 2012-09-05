@@ -257,5 +257,17 @@ module Librevox
       application "mkdir", path
     end
 
+    def conference_set_auto_outcall variable, &block
+      application "conference_set_auto_outcall", variable, &block
+    end
+
+    def conference variable, &block
+      application "conference", variable, &block
+    end
+
+    def esf_page_group_app_uuid variable, &block
+      application "esf_page_group_app_uuid", variable, &block
+    end
+
   end
 end
