@@ -31,13 +31,21 @@ module Librevox
       end
       @socket.connect(Socket.pack_sockaddr_in(@port, addr[0][3]))
 
-      @socket.send "auth #{@auth}\n\n"
+      @socket.send "auth #{@auth}\n\n", 0
       read_response
+    end
+
+    def bgapi
+      return self
+    end
+
+    def api
+      return self
     end
 
     def command *args
       check_connection
-      @socket.send "#{super(*args)}\n\n"
+      @socket.send "#{super(*args)}\n\n", 0
       read_response
     end
 
@@ -66,15 +74,15 @@ module Librevox
 
       headers
     end
-  end
 
-  private
 
-  def check_connection
-    begin
-      numread = @socket.recvfrom_nonblock(1)
-      raise "Connection closed??" if numread[0] == ""
-    rescue Errno::EAGAIN => ex
+    def check_connection
+      begin
+        numread = @socket.recvfrom_nonblock(1)
+        raise "Connection closed??" if numread[0] == ""
+      rescue Errno::EAGAIN => ex
+      end
     end
   end
 end
+
