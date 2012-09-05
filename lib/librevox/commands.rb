@@ -50,6 +50,10 @@ module Librevox
       command "originate", arg_string, &block
     end
 
+    def originate_simple arg, &block
+      command "originate", arg, &block
+    end
+
     # FreeSWITCH control messages.
     # @example
     #   socket.fsctl :hupall, :normal_clearing
