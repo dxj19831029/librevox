@@ -269,5 +269,9 @@ module Librevox
       application "esf_page_group_app_uuid", variable, &block
     end
 
+    def eval variable, &block
+      application "eval", variable, &block
+    end
+
   end
 end
