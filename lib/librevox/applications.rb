@@ -104,6 +104,10 @@ module Librevox
       application "export", "#{nolocal}#{var}", &block
     end
 
+    def export_var var, value, &block
+      application "export", "#{var}=#{value}", &block
+    end
+
     # Generate TGML tones
     # @example Generate a 500ms beep at 800Hz
     #   gentones "%(500,0,800)"
