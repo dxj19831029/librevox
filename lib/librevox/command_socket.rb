@@ -35,17 +35,17 @@ module Librevox
       read_response
     end
 
-    def bgapi
-      return self
+    def api
+      @command_delegate ||= Librevox::Listener::Base::CommandDelegate.new(self)
     end
 
-    def api
-      return self
+    def bgapi
+      @command_bg_delegate ||= Librevox::Listener::Base::CommandDelegate.new(self, "bgapi")
     end
 
     def command *args
       check_connection
-      @socket.send "#{super(*args)}\n\n", 0
+      @socket.send "#{super(*args).strip}\n\n", 0
       read_response
     end
 
