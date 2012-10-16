@@ -12,27 +12,35 @@ module Librevox
       @port     = args[:port] || "8021"
       @auth     = args[:auth] || "ClueCon"
       @timeout  = args[:timeout] || nil
-
+      @socket = nil
       connect(@timeout) unless args[:connect] == false
     end
 
     def connect(timeout=@timeout)
       #@socket = TCPSocket.open(@server, @port)
-
       addr = Socket.getaddrinfo(@server, nil)
-      @socket = Socket.new(Socket.const_get(addr[0][0]), Socket::SOCK_STREAM, 0)
+      if @socket.nil?
+        @socket = Socket.new(Socket.const_get(addr[0][0]), Socket::SOCK_STREAM, 0)
 
-      if timeout
-        secs = Integer(timeout)
-        usecs = Integer((timeout - secs) * 1_000_000)
-        optval = [secs, usecs].pack("l_2")
-        @socket.setsockopt Socket::SOL_SOCKET, Socket::SO_RCVTIMEO, optval
-        @socket.setsockopt Socket::SOL_SOCKET, Socket::SO_SNDTIMEO, optval
+        if timeout
+          secs = Integer(timeout)
+          usecs = Integer((timeout - secs) * 1_000_000)
+          optval = [secs, usecs].pack("l_2")
+          @socket.setsockopt Socket::SOL_SOCKET, Socket::SO_RCVTIMEO, optval
+          @socket.setsockopt Socket::SOL_SOCKET, Socket::SO_SNDTIMEO, optval
+        end
       end
-      @socket.connect(Socket.pack_sockaddr_in(@port, addr[0][3]))
+      begin
+        @socket.connect(Socket.pack_sockaddr_in(@port, addr[0][3]))
+      rescue Exception => e
+        p e
+        return false
+      end
+
 
       @socket.send "auth #{@auth}\n\n", 0
       read_response
+      return true
     end
 
     def api
@@ -44,9 +52,13 @@ module Librevox
     end
 
     def command *args
-      check_connection
-      @socket.send "#{super(*args).strip}\n\n", 0
-      read_response
+      if check_connection
+        p "#{super(*args).strip}\n\n"
+        @socket.send "#{super(*args).strip}\n\n", 0
+        read_response
+      else
+        return false
+      end
     end
 
     def raw *args
@@ -79,9 +91,13 @@ module Librevox
     def check_connection
       begin
         numread = @socket.recvfrom_nonblock(1)
-        raise "Connection closed??" if numread[0] == ""
+        return self.connect(@timeout) if numread[0] == ""
       rescue Errno::EAGAIN => ex
+        return self.connect(@timeout)
+      rescue Exception => ex
+        return self.connect(@timeout)
       end
+      return true
     end
   end
 end
