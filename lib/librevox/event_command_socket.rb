@@ -16,7 +16,6 @@ module Librevox
       @auth     = args[:auth] || "ClueCon"
       @timeout  = args[:timeout] || nil
       @socket = nil
-      connect(@timeout) unless args[:connect] == false
     end
 
     def api
