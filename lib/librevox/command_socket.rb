@@ -19,7 +19,7 @@ module Librevox
     def connect(timeout=@timeout)
       #@socket = TCPSocket.open(@server, @port)
       addr = Socket.getaddrinfo(@server, nil)
-      if @socket.nil?
+
         @socket = Socket.new(Socket.const_get(addr[0][0]), Socket::SOCK_STREAM, 0)
 
         if timeout
@@ -29,7 +29,7 @@ module Librevox
           @socket.setsockopt Socket::SOL_SOCKET, Socket::SO_RCVTIMEO, optval
           @socket.setsockopt Socket::SOL_SOCKET, Socket::SO_SNDTIMEO, optval
         end
-      end
+
       begin
         @socket.connect(Socket.pack_sockaddr_in(@port, addr[0][3]))
       rescue Exception => e
