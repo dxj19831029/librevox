@@ -67,20 +67,22 @@ module Librevox
     end
 
     def read_response
-      response = Librevox::Response.new
-      until response.command_reply? or response.api_response?
-        response.headers = read_headers 
-      end
+      #timeout(5) do
+        response = Librevox::Response.new
+        until response.command_reply? or response.api_response?
+          response.headers = read_headers
+        end
 
-      length = response.headers[:content_length].to_i
-      response.instance_variable_set(:@content, length > 0 ? @socket.read(length) : "")
-      response
+        length = response.headers[:content_length].to_i
+        response.instance_variable_set(:@content, length > 0 ? next_line_readable?(@socket) && @socket.read(length) : "")
+        response
+      #end
     end
 
     def read_headers
       headers = ""
 
-      while line = @socket.gets and !line.chomp.empty?
+      while next_line_readable?(@socket) && line = @socket.gets and !line.chomp.empty?
         headers += line
       end
 
@@ -98,6 +100,12 @@ module Librevox
         return self.connect(@timeout)
       end
       return true
+    end
+
+    def next_line_readable?(socket)
+      readfds, writefds, exceptfds = select([socket], nil, nil, 0.1)
+      p :r => readfds, :w => writefds, :e => exceptfds
+      readfds #Will be nil if next line cannot be read
     end
   end
 end
