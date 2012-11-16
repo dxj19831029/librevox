@@ -75,7 +75,7 @@ module Librevox
 
         length = response.headers[:content_length].to_i
         block = proc do
-          x=@socket.read(length);puts "r #{x.inspect}";x
+          x=@socket.read(length);puts "reads of #{x.inspect}";x
         end
         response.instance_variable_set(:@content, length > 0 ? block.call : "")
         response
@@ -86,7 +86,7 @@ module Librevox
       headers = ""
 
       while line = @socket.gets and !line.chomp.empty?
-        p "reading of #{line.inspect}"
+        puts  "gets of #{line.inspect}"
         headers += line
       end
 
