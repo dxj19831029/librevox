@@ -69,7 +69,7 @@ module Librevox
     def read_response
       #timeout(5) do
         response = Librevox::Response.new
-        until response.command_reply? or response.api_response?
+        until response.command_reply? or response.api_response? or response.disconnect_reply?
           response.headers = read_headers
         end
 

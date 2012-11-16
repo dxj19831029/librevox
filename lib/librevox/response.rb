@@ -40,6 +40,10 @@ module Librevox
       @headers[:content_type] == "command/reply"
     end
 
+    def disconnect_reply?
+      @headers[:ontent_type] == "text/disconnect-notice"
+    end
+
     private
     def headers_2_hash *args
       EM::Protocols::HeaderAndContentProtocol.headers_2_hash *args
